@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block content %}
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow">{{ page_title|upper }}</p>
+            <h1>{{ page_title }}</h1>
+        </div>
+    </div>
+    <section class="empty-state">
+        <h2>Удахгүй</h2>
+        <p>Энэ хэсэг одоогоор бэлтгэгдэж байна.</p>
+    </section>
+{% endblock %}

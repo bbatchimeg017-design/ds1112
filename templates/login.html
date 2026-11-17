@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="mn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Нэвтрэх | DS Construction</title>
+    <link rel="icon" href="{{ url_for('static', filename='logo.jpg') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main class="login-layout">
+        <section class="login-card">
+            <img class="login-logo" src="{{ url_for('static', filename='logo.jpg') }}"
+                 alt="DS Construction">
+            <p class="eyebrow">КОНТЕНТЫН УДИРДЛАГА</p>
+            <h1>Тавтай морил</h1>
+            <p class="muted">Самбартаа нэвтрэхийн тулд мэдээллээ оруулна уу.</p>
+            {% if error %}
+                <div class="notice error" role="alert">{{ error }}</div>
+            {% endif %}
+            <form method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <label for="email">И-мэйл</label>
+                <input id="email" name="email" type="email" value="{{ email }}"
+                       autocomplete="username" required autofocus>
+                <label for="password">Нууц үг</label>
+                <input id="password" name="password" type="password"
+                       autocomplete="current-password" required>
+                <button type="submit">Нэвтрэх</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

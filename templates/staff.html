@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Ажилтан{% endblock %}
+{% block content %}
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow">АЖИЛТАН</p>
+            <h1>Ажилтнууд</h1>
+        </div>
+        <span class="count">{{ staff|length }} ажилтан</span>
+    </div>
+
+    {% with new_url=url_for('create_item', resource='staff'), new_label='Шинэ ажилтан',
+            placeholder='Нэр, албан тушаал, утас, и-мэйлээр хайх' %}
+        {% include "_toolbar.html" %}
+    {% endwith %}
+
+    {% if error %}
+        <div class="notice error" role="alert">{{ error }}</div>
+    {% elif staff %}
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Овог нэр</th>
+                        <th>Албан тушаал</th>
+                        <th>Утас</th>
+                        <th>И-мэйл</th>
+                        <th>Ажилд орсон</th>
+                        <th>Төлөв</th>
+                        <th class="actions-col">Үйлдэл</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in staff %}
+                        <tr>
+                            <td class="muted-cell">{{ s.id }}</td>
+                            <td>{{ s.full_name }}</td>
+                            <td>{{ s.position }}</td>
+                            <td class="muted-cell nowrap">{{ s.phone or "—" }}</td>
+                            <td class="muted-cell">{{ s.email or "—" }}</td>
+                            <td class="nowrap">{{ s.hired_on or "—" }}</td>
+                            <td>
+                                <span class="badge badge-{{ s.status }}">
+                                    {{ status_labels.get(s.status, s.status) }}
+                                </span>
+                            </td>
+                            <td class="actions-col">
+                                <a class="button-secondary small" href="{{ url_for('edit_item', resource='staff', item_id=s.id) }}">Засах</a>
+                                <a class="button-danger small" href="{{ url_for('delete_item', resource='staff', item_id=s.id) }}">Устгах</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <section class="empty-state">
+            {% if query %}
+                <h2>Илэрц олдсонгүй</h2>
+                <p>Өөр үгээр хайж үзнэ үү.</p>
+            {% else %}
+                <h2>Одоогоор ажилтан алга</h2>
+                <p>«+ Шинэ ажилтан» товчоор нэмнэ үү.</p>
+            {% endif %}
+        </section>
+    {% endif %}
+{% endblock %}

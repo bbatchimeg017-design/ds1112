@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% set is_new = item_id is none %}
+{% block title %}{{ 'Шинэ ' ~ config.singular if is_new else config.singular|capitalize ~ ' засах' }}{% endblock %}
+{% block content %}
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow">{{ 'НЭМЭХ' if is_new else 'ЗАСАХ' }}</p>
+            <h1>{{ 'Шинэ ' ~ config.singular if is_new else config.singular|capitalize ~ ' засах' }}</h1>
+        </div>
+    </div>
+
+    {% if error %}
+        <div class="notice error" role="alert">{{ error }}</div>
+    {% endif %}
+
+    <form class="form-card" method="post" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        {% for field in config.fields %}
+            {% set name = field.name %}
+            {% set value = values.get(name, '') %}
+            <div class="field{% if errors.get(name) %} has-error{% endif %}">
+                <label for="f-{{ name }}">
+                    {{ field.label }}{% if field.required %} <span class="req">*</span>{% endif %}
+                </label>
+                {% if field.type == 'textarea' %}
+                    <textarea id="f-{{ name }}" name="{{ name }}" rows="6">{{ value }}</textarea>
+                {% elif field.type == 'select' %}
+                    <select id="f-{{ name }}" name="{{ name }}">
+                        {% for key, text in field.options.items() %}
+                            <option value="{{ key }}" {% if key == value %}selected{% endif %}>{{ text }}</option>
+                        {% endfor %}
+                    </select>
+                {% else %}
+                    <input id="f-{{ name }}" name="{{ name }}" value="{{ value }}"
+                           type="{{ {'datetime': 'datetime-local'}.get(field.type, field.type) }}"
+                           {% if field.min is defined %}min="{{ field.min }}"{% endif %}
+                           {% if field.required %}required{% endif %}>
+                {% endif %}
+                {% if errors.get(name) %}
+                    <p class="field-error">{{ errors[name] }}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <div class="form-actions">
+            <button type="submit">{{ 'Нэмэх' if is_new else 'Хадгалах' }}</button>
+            <a class="button-secondary" href="{{ url_for(config.list_endpoint) }}">Болих</a>
+        </div>
+    </form>
+{% endblock %}

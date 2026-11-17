@@ -1,0 +1,16 @@
+{# Search box + "add" button, shared by every data menu.
+   Needs: query, new_url, new_label, placeholder #}
+<div class="toolbar">
+    <form class="search" method="get" role="search">
+        <input type="search" name="q" value="{{ query }}" placeholder="{{ placeholder }}"
+               aria-label="Хайх">
+        <button class="button-secondary" type="submit">Хайх</button>
+        {% if query %}
+            <a class="link-muted" href="{{ request.path }}">Цэвэрлэх</a>
+        {% endif %}
+    </form>
+    <a class="button" href="{{ new_url }}">+ {{ new_label }}</a>
+</div>
+{% if query %}
+    <p class="search-note">«{{ query }}» гэж хайсан үр дүн</p>
+{% endif %}

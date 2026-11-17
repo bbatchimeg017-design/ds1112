@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Контент{% endblock %}
+{% block content %}
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow">КОНТЕНТ</p>
+            <h1>Постууд</h1>
+        </div>
+        <span class="count">{{ posts|length }} пост</span>
+    </div>
+
+    {% with new_url=url_for('create_item', resource='content'), new_label='Шинэ пост',
+            placeholder='Гарчиг эсвэл текстээр хайх' %}
+        {% include "_toolbar.html" %}
+    {% endwith %}
+
+    {% if error %}
+        <div class="notice error" role="alert">{{ error }}</div>
+    {% elif posts %}
+        <section class="draft-list">
+            {% for post in posts %}
+                <article class="draft-card">
+                    <div class="draft-meta">
+                        <span class="badge badge-{{ post.status }}">
+                            {{ status_labels.get(post.status, post.status) }}
+                        </span>
+                        <time>{{ post.created_at|ubtime }}</time>
+                    </div>
+                    <h2>{{ post.title }}</h2>
+                    <p>{{ post.content or "" }}</p>
+                    <div class="card-actions">
+                        <a class="button-secondary small" href="{{ url_for('edit_item', resource='content', item_id=post.id) }}">Засах</a>
+                        <a class="button-danger small" href="{{ url_for('delete_item', resource='content', item_id=post.id) }}">Устгах</a>
+                    </div>
+                </article>
+            {% endfor %}
+        </section>
+    {% else %}
+        <section class="empty-state">
+            {% if query %}
+                <h2>Илэрц олдсонгүй</h2>
+                <p>Өөр үгээр хайж үзнэ үү.</p>
+            {% else %}
+                <h2>Одоогоор пост алга</h2>
+                <p>«+ Шинэ пост» товчоор нэмнэ үү.</p>
+            {% endif %}
+        </section>
+    {% endif %}
+{% endblock %}

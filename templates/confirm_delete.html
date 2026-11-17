@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Устгах уу?{% endblock %}
+{% block content %}
+    <section class="confirm-card" role="alertdialog" aria-labelledby="confirm-title">
+        <p class="eyebrow">УСТГАХ</p>
+        <h1 id="confirm-title">Та итгэлтэй байна уу?</h1>
+        <p>
+            Устгах {{ config.singular }}:
+            <strong>«{{ label }}»</strong>
+        </p>
+        <p class="muted">Устгасны дараа буцааж сэргээх боломжгүй.</p>
+        <form method="post" class="form-actions">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <button class="button-danger" type="submit">Тийм, устгах</button>
+            <a class="button-secondary" href="{{ url_for(config.list_endpoint) }}">Үгүй, буцах</a>
+        </form>
+    </section>
+{% endblock %}

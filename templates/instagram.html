@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Instagram{% endblock %}
+{% block content %}
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow">INSTAGRAM</p>
+            <h1>Instagram постууд</h1>
+        </div>
+        <span class="count">{{ posts|length }} пост</span>
+    </div>
+
+    <section class="ig-profile">
+        <img class="ig-profile-avatar" src="{{ url_for('static', filename='logo.jpg') }}" alt="">
+        <div>
+            <strong>DS Construction</strong>
+            <span>{{ posts|length }} пост</span>
+            <p>Precision Concrete Solution
+Бетон цутгалтын мэргэжлийн гүйцэтгэгч · 2020 оноос
+📍 Хан-Уул дүүрэг, Мөнх Тауэр, 504 тоот</p>
+        </div>
+    </section>
+
+    <section class="ig-feed">
+        {% for post in posts %}
+            <article class="ig-post">
+                <header class="ig-head">
+                    <img class="ig-avatar" src="{{ url_for('static', filename='logo.jpg') }}" alt="">
+                    <strong>DS Construction</strong>
+                    <span class="badge badge-pending">{{ post.status }}</span>
+                </header>
+
+                <div class="ig-media ig-{{ post.shape }}{% if post.slides|length > 1 %} ig-carousel{% endif %}"
+                     {% if post.slides|length > 1 %}tabindex="0" aria-label="{{ post.slides|length }} зурагтай карусель"{% endif %}>
+                    {% for slide in post.slides %}
+                        <figure>
+                            <img src="{{ url_for('static', filename=slide.image) }}"
+                                 alt="{{ slide.alt }}" loading="lazy">
+                            {% if post.slides|length > 1 %}
+                                <span class="ig-counter">{{ loop.index }}/{{ loop.length }}</span>
+                            {% endif %}
+                        </figure>
+                    {% endfor %}
+                </div>
+                {% if post.slides|length > 1 %}
+                    <p class="ig-hint">← Хажуу тийш гүйлгэж үзнэ үү →</p>
+                {% endif %}
+
+                <div class="ig-body">
+                    <p class="ig-caption"><strong>DS Construction</strong> {{ post.caption }}</p>
+                    <p class="ig-tags">{{ post.hashtags }}</p>
+                    <time>{{ post.date }}</time>
+                </div>
+            </article>
+        {% endfor %}
+    </section>
+{% endblock %}

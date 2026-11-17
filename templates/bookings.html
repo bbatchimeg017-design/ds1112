@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Захиалга{% endblock %}
+{% block content %}
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow">ЗАХИАЛГА</p>
+            <h1>Захиалгууд</h1>
+        </div>
+        <span class="count">{{ bookings|length }} захиалга</span>
+    </div>
+
+    {% with new_url=url_for('create_item', resource='bookings'), new_label='Шинэ захиалга',
+            placeholder='Нэр эсвэл и-мэйлээр хайх' %}
+        {% include "_toolbar.html" %}
+    {% endwith %}
+
+    {% if error %}
+        <div class="notice error" role="alert">{{ error }}</div>
+    {% elif bookings %}
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Нэр</th>
+                        <th>И-мэйл</th>
+                        <th>Огноо, цаг</th>
+                        <th class="num">Хүний тоо</th>
+                        <th>Төлөв</th>
+                        <th class="actions-col">Үйлдэл</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for b in bookings %}
+                        <tr>
+                            <td class="muted-cell">{{ b.id }}</td>
+                            <td>{{ b.customer_name }}</td>
+                            <td class="muted-cell">{{ b.customer_email or "—" }}</td>
+                            <td class="nowrap">{{ b.booking_at|ubtime }}</td>
+                            <td class="num">{{ b.guest_count }}</td>
+                            <td>
+                                <span class="badge badge-{{ b.status }}">
+                                    {{ status_labels.get(b.status, b.status) }}
+                                </span>
+                            </td>
+                            <td class="actions-col">
+                                <a class="button-secondary small" href="{{ url_for('edit_item', resource='bookings', item_id=b.id) }}">Засах</a>
+                                <a class="button-danger small" href="{{ url_for('delete_item', resource='bookings', item_id=b.id) }}">Устгах</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <section class="empty-state">
+            {% if query %}
+                <h2>Илэрц олдсонгүй</h2>
+                <p>Өөр үгээр хайж үзнэ үү.</p>
+            {% else %}
+                <h2>Одоогоор захиалга алга</h2>
+                <p>«+ Шинэ захиалга» товчоор нэмнэ үү.</p>
+            {% endif %}
+        </section>
+    {% endif %}
+{% endblock %}

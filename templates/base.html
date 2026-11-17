@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="mn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %} | DS Construction</title>
+    <link rel="icon" href="{{ url_for('static', filename='logo.jpg') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="app">
+    <aside class="sidebar">
+        <a class="sidebar-logo" href="{{ url_for('dashboard') }}">
+            <img src="{{ url_for('static', filename='logo.jpg') }}" alt="DS Construction">
+        </a>
+        <nav class="menu" aria-label="Үндсэн цэс">
+            <a href="{{ url_for('dashboard') }}" {% if active == 'content' %}class="active" aria-current="page"{% endif %}>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h10l4 4v12H5z M14 4v5h5 M8 13h8 M8 17h6"/></svg>
+                Контент
+            </a>
+            <a href="{{ url_for('facebook') }}" {% if active == 'facebook' %}class="active" aria-current="page"{% endif %}>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3a4 4 0 0 0-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8z"/></svg>
+                Facebook
+            </a>
+            <a href="{{ url_for('instagram') }}" {% if active == 'instagram' %}class="active" aria-current="page"{% endif %}>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4z M12 8.5a3.5 3.5 0 1 0 0 7a3.5 3.5 0 0 0 0-7z M17.3 6.7h.01"/></svg>
+                Instagram
+            </a>
+            <a href="{{ url_for('chat') }}" {% if active == 'chat' %}class="active" aria-current="page"{% endif %}>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>
+                Чат
+            </a>
+            <a href="{{ url_for('bookings') }}" {% if active == 'bookings' %}class="active" aria-current="page"{% endif %}>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v14H4z M4 10h16 M8 3v5 M16 3v5"/></svg>
+                Захиалга
+            </a>
+            <a href="{{ url_for('staff') }}" {% if active == 'staff' %}class="active" aria-current="page"{% endif %}>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11a3.5 3.5 0 1 0 0-7a3.5 3.5 0 0 0 0 7z M2.5 20a6.5 6.5 0 0 1 13 0 M16 4.5a3.5 3.5 0 0 1 0 6.5 M18 14a6 6 0 0 1 3.5 6"/></svg>
+                Ажилтан
+            </a>
+        </nav>
+        <div class="sidebar-account">
+            <span title="{{ email }}">{{ email }}</span>
+            <form method="post" action="{{ url_for('logout') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <button class="button-secondary" type="submit">Гарах</button>
+            </form>
+        </div>
+    </aside>
+    <main class="content">
+        {% for category, message in get_flashed_messages(with_categories=true) %}
+            <div class="notice {{ 'error' if category == 'error' else 'success' }}" role="status">{{ message }}</div>
+        {% endfor %}
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

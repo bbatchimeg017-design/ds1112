@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Facebook{% endblock %}
+{% block content %}
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow">FACEBOOK</p>
+            <h1>Facebook постууд</h1>
+        </div>
+        <span class="count">{{ posts|length }} пост</span>
+    </div>
+    <section class="fb-feed">
+        {% for post in posts %}
+            <article class="fb-post">
+                <header class="fb-post-head">
+                    <img class="fb-avatar" src="{{ url_for('static', filename='logo.jpg') }}" alt="">
+                    <div>
+                        <strong>DS Construction LLC</strong>
+                        <span>{{ post.date }} · Нийтэд</span>
+                    </div>
+                    <span class="badge badge-pending">{{ post.status }}</span>
+                </header>
+                <p class="fb-caption">{{ post.caption }}</p>
+                {% if post.gallery %}
+                    <div class="fb-gallery">
+                        {% for photo in post.gallery %}
+                            <figure>
+                                <img src="{{ url_for('static', filename=photo.image) }}"
+                                     alt="{{ photo.name }}" loading="lazy">
+                                <figcaption>{{ photo.name }}</figcaption>
+                            </figure>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <img class="fb-image" src="{{ url_for('static', filename=post.image) }}"
+                         alt="{{ post.alt }}" loading="lazy">
+                {% endif %}
+            </article>
+        {% endfor %}
+    </section>
+{% endblock %}
